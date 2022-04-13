@@ -9,9 +9,22 @@ jobs:
   build:
     environment: staging
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Caching Vue
+        id: vue-cache-build
+        uses: actions/cache@v2
+        with:
+          path: |
+            public
+            node_modules
+          key: ${{ runner.os }}-vue-teros-build-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-vue-teros-build-
       - name: Install dependencies
         run: npm install
       - name: Build Website
